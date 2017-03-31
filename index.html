@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <meta charset="utf-8"/>
+  <!-- css -->
+  <link rel="stylesheet" href=media/styles/codemirror.css>
+  <link rel="stylesheet" href="media/styles/monokai.css">
+  <link rel="stylesheet" href="media/styles/dialog.css">
+  <!-- js -->
+  <script src="media/scripts/codemirror.js"></script>
+  <script src="media/scripts/xml.js"></script>
+  <script src="media/scripts/search.js"></script>
+  <script src="media/scripts/searchcursor.js"></script>
+  <script src="media/scripts/jump-to-line.js"></script>
+  <script src="media/scripts/dialog.js"></script>
+  <!-- otros -->
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
+  <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" />
+  <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
+  <style type=text/css>
+        .CodeMirror {
+          /*float: left;*/
+          width: 100%;
+          border: 1px solid black;
+        }
+        iframe {
+          width: 50%;
+          /*float: left;*/
+          height: 300px;
+          border: 1px solid black;
+        }
+  </style>
+</head>
+<body>
+
+<h3>HTML5 preview</h3>
+    <p>
+      <b>Buscar</b>: Ctrl-F / Cmd-F<br>
+      <b>Buscar siguiente</b>: Ctrl-G / Cmd-G   <br>
+      <b>Buscar anterior</b>: Shift-Ctrl-G / Shift-Cmd-G  <br>
+      <b>Remplazar</b>: Shift-Ctrl-F / Cmd-Option-F    <br>
+      <b>Remplazar todos</b>: Shift-Ctrl-R / Shift-Cmd-Option-F
+    </p>
+    <center>
+      Arrastra tu HTML aquí:
+    </center>
+    <textarea id="code" name="code"></textarea>
+    <center>
+      Previa del HTML:<br>
+      <iframe id="preview"></iframe>
+    </center>
+    <script>
+      var delay;
+      // Initialize CodeMirror editor with a nice html5 canvas demo.
+      var editor = CodeMirror.fromTextArea(document.getElementById('code'), {
+        mode: 'text/html',
+        lineNumbers: true,
+        lineWrapping: true,
+        theme: "monokai",
+        extraKeys: {"Alt-F": "findPersistent"}
+      });
+      editor.on("change", function() {
+        clearTimeout(delay);
+        delay = setTimeout(updatePreview, 300);
+      });
+
+      function updatePreview() {
+        var previewFrame = document.getElementById('preview');
+        var preview =  previewFrame.contentDocument ||  previewFrame.contentWindow.document;
+        preview.open();
+        preview.write(editor.getValue());
+        preview.close();
+      }
+      setTimeout(updatePreview, 300);
+    </script>
+
+</body>
+</html>
